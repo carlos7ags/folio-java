@@ -1,0 +1,22 @@
+# Gradle
+.gradle
+build
+.kotlin
+
+# IDE
+.idea
+*.iml
+.vscode
+.project
+.classpath
+.settings
+
+# Generated PDFs
+*.pdf
+
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,146 @@
+name: Build Native Libraries
+
+on:
+  workflow_dispatch:
+    inputs:
+      folio_ref:
+        description: 'Git ref of folio Go repo to build'
+        required: false
+        default: 'main'
+
+env:
+  FOLIO_REPO: carlos7ags/folio
+
+jobs:
+  build-macos-arm64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Clone folio engine
+        run: git clone --depth 1 --branch ${{ github.event.inputs.folio_ref }} https://github.com/${{ env.FOLIO_REPO }}.git folio-engine
+      - name: Build libfolio.dylib (arm64)
+        run: |
+          cd folio-engine
+          CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -buildmode=c-shared -o libfolio.dylib ./export/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-macos-aarch64
+          path: folio-engine/libfolio.dylib
+
+  build-macos-x86_64:
+    runs-on: macos-13  # Intel runner
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Clone folio engine
+        run: git clone --depth 1 --branch ${{ github.event.inputs.folio_ref }} https://github.com/${{ env.FOLIO_REPO }}.git folio-engine
+      - name: Build libfolio.dylib (x86_64)
+        run: |
+          cd folio-engine
+          CGO_ENABLED=1 GOOS=darwin GOARCH=amd64 go build -buildmode=c-shared -o libfolio.dylib ./export/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-macos-x86_64
+          path: folio-engine/libfolio.dylib
+
+  build-linux-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Clone folio engine
+        run: git clone --depth 1 --branch ${{ github.event.inputs.folio_ref }} https://github.com/${{ env.FOLIO_REPO }}.git folio-engine
+      - name: Build libfolio.so (x86_64)
+        run: |
+          cd folio-engine
+          CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -buildmode=c-shared -o libfolio.so ./export/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-linux-x86_64
+          path: folio-engine/libfolio.so
+
+  build-linux-aarch64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Install cross-compiler
+        run: sudo apt-get update && sudo apt-get install -y gcc-aarch64-linux-gnu
+      - name: Clone folio engine
+        run: git clone --depth 1 --branch ${{ github.event.inputs.folio_ref }} https://github.com/${{ env.FOLIO_REPO }}.git folio-engine
+      - name: Build libfolio.so (aarch64)
+        run: |
+          cd folio-engine
+          CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -buildmode=c-shared -o libfolio.so ./export/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-linux-aarch64
+          path: folio-engine/libfolio.so
+
+  build-windows-x86_64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - name: Install cross-compiler
+        run: sudo apt-get update && sudo apt-get install -y gcc-mingw-w64-x86-64
+      - name: Clone folio engine
+        run: git clone --depth 1 --branch ${{ github.event.inputs.folio_ref }} https://github.com/${{ env.FOLIO_REPO }}.git folio-engine
+      - name: Build folio.dll (x86_64)
+        run: |
+          cd folio-engine
+          CGO_ENABLED=1 GOOS=windows GOARCH=amd64 CC=x86_64-w64-mingw32-gcc go build -buildmode=c-shared -o folio.dll ./export/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-windows-x86_64
+          path: folio-engine/folio.dll
+
+  bundle:
+    needs: [build-macos-arm64, build-macos-x86_64, build-linux-x86_64, build-linux-aarch64, build-windows-x86_64]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-macos-aarch64
+          path: lib/src/main/resources/natives/macos-aarch64/
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-macos-x86_64
+          path: lib/src/main/resources/natives/macos-x86_64/
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-linux-x86_64
+          path: lib/src/main/resources/natives/linux-x86_64/
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-linux-aarch64
+          path: lib/src/main/resources/natives/linux-aarch64/
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: native-windows-x86_64
+          path: lib/src/main/resources/natives/windows-x86_64/
+
+      - name: List bundled natives
+        run: find lib/src/main/resources/natives -type f
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: natives-all
+          path: lib/src/main/resources/natives/

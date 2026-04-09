@@ -1,0 +1,8 @@
+Folio Java SDK
+Copyright 2026 Carlos Munoz and the Folio Authors
+
+This product bundles the Folio Go engine (Apache 2.0).
+See https://github.com/carlos7ags/folio for the engine source.
+
+Runtime dependencies: none (JDK 22+ only)
+Test dependency: JUnit 5 (Eclipse Public License 2.0)
