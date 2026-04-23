@@ -701,6 +701,73 @@ public final class Document implements AutoCloseable {
     }
 
     /**
+     * Saves the document to a file with explicit writer options. Pass
+     * {@code null} to use the engine's default writer settings.
+     *
+     * <p>See {@link WriteOptions} for the per-feature toggles. The PDF
+     * file structure produced by the writer is described in
+     * ISO 32000-1 §7.5 (File Structure).
+     *
+     * @param path    the output file path
+     * @param options the writer options, or {@code null} for defaults
+     * @throws FolioIOException if the save fails due to a file I/O error
+     * @throws FolioException if the native save call fails for other reasons
+     * @since 0.7.1
+     */
+    public void saveWithOptions(String path, WriteOptions options) {
+        long optsHandle = (options == null) ? 0L : options.handle();
+        FolioNative.documentSaveWithOptions(handle.get(), path, optsHandle);
+    }
+
+    /**
+     * Saves the document to a file with explicit writer options. Pass
+     * {@code null} to use the engine's default writer settings.
+     *
+     * @param path    the output file path
+     * @param options the writer options, or {@code null} for defaults
+     * @throws FolioIOException if the save fails due to a file I/O error
+     * @throws FolioException if the native save call fails for other reasons
+     * @since 0.7.1
+     */
+    public void saveWithOptions(java.nio.file.Path path, WriteOptions options) {
+        saveWithOptions(path.toString(), options);
+    }
+
+    /**
+     * Renders the document to an in-memory byte array using explicit writer
+     * options. Pass {@code null} to use the engine's default writer settings.
+     *
+     * @param options the writer options, or {@code null} for defaults
+     * @return the PDF bytes
+     * @throws FolioException if the native write call fails
+     * @since 0.7.1
+     */
+    public byte[] toBytesWithOptions(WriteOptions options) {
+        long optsHandle = (options == null) ? 0L : options.handle();
+        long buf = FolioNative.documentWriteToBufferWithOptions(handle.get(), optsHandle);
+        if (buf == 0) throw new FolioException("Failed to write document to buffer: " + FolioNative.lastError());
+        return FolioNative.bufferToByteArray(buf);
+    }
+
+    /**
+     * Toggles emission of {@code /ActualText} entries in the marked-content
+     * sequences of tagged PDFs (ISO 32000-1 §14.9.4).
+     *
+     * <p>{@code /ActualText} provides assistive technologies with the
+     * canonical Unicode text for a marked region; turn it off to reduce file
+     * size when accessibility is not required (or when the visible glyphs
+     * already match the logical text).
+     *
+     * @param enabled {@code true} to emit {@code /ActualText} entries
+     * @return this document, for chaining
+     * @since 0.7.1
+     */
+    public Document setActualText(boolean enabled) {
+        FolioNative.documentSetActualText(handle.get(), enabled);
+        return this;
+    }
+
+    /**
      * Writes the rendered PDF bytes to the given output stream.
      *
      * @param out the target output stream

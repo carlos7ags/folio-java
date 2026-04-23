@@ -7,7 +7,7 @@
 
 A fluent Java API for PDF generation, signing, and processing. Backed by the [Folio](https://github.com/carlos7ags/folio) Go engine via [Panama FFI](https://openjdk.org/jeps/454). Apache 2.0 licensed.
 
-**Requires JDK 22+** | Zero runtime dependencies | Bundles folio engine v0.6.2 | [foliopdf.dev](https://foliopdf.dev) | [Playground](https://playground.foliopdf.dev)
+**Requires JDK 22+** | Zero runtime dependencies | Bundles folio engine v0.7.1 | [foliopdf.dev](https://foliopdf.dev) | [Playground](https://playground.foliopdf.dev)
 
 ## Requirements
 
@@ -220,6 +220,74 @@ doc.pdfA(PdfALevel.PDF_A_3B);
 doc.encryption("user-pass", "owner-pass", EncryptionAlgorithm.AES_256);
 ```
 
+### Writer optimizer (v0.7.1)
+
+`WriteOptions` exposes the per-feature toggles of the v0.7.1 PDF writer:
+cross-reference streams (ISO 32000-1 §7.5.8), object streams (§7.5.7),
+orphan sweep, content-stream cleanup, object deduplication, and stream
+recompression.
+
+```java
+try (var doc = Document.builder().a4().build();
+     var opts = WriteOptions.builder()
+         .useXrefStream(true)
+         .useObjectStreams(true)
+         .objectStreamCapacity(64)
+         .deduplicateObjects(true)
+         .recompressStreams(true)
+         .build()) {
+    doc.add(Paragraph.of("Hello"));
+    doc.saveWithOptions("optimized.pdf", opts);
+}
+```
+
+Both `Document.saveWithOptions(...)` and `Document.toBytesWithOptions(...)`
+accept `null` for the options argument to use engine defaults, so callers
+that want a single optimized write do not need to allocate a `WriteOptions`
+instance.
+
+### Right-to-left text (v0.7.1)
+
+Set the writing direction on paragraphs, lists, or tables with the
+`Direction` enum. `AUTO` defers to the Unicode Bidi algorithm; `LTR` and
+`RTL` force the direction.
+
+```java
+doc.add(Paragraph.of("שלום עולם").setDirection(Direction.RTL));
+doc.add(ListElement.of().setDirection(Direction.AUTO).item("بند"));
+
+var table = Table.builder().row("الأول", "الثاني", "الثالث").build();
+table.setDirection(Direction.RTL);
+doc.add(table);
+```
+
+RTL tables reverse the visual column order; RTL lists place markers on
+the right.
+
+### `/ActualText` toggle (v0.7.1)
+
+Tagged-PDF output emits `/ActualText` entries on marked-content sequences
+by default (ISO 32000-1 §14.9.4). Disable them when accessibility is not
+required to reduce file size.
+
+```java
+doc.tagged(true);
+doc.setActualText(false);
+```
+
+### Balanced multi-column fill (v0.7.1)
+
+`Columns.setBalanced(true)` fills columns to roughly equal heights,
+matching the CSS `column-fill: balance` model. The default is sequential
+fill (each column reaches full height before the next begins).
+
+```java
+var cols = Columns.of(2).gap(20).setBalanced(true);
+cols.add(0, Paragraph.of("First fragment"));
+cols.add(1, Paragraph.of("Second fragment"));
+doc.add(cols);
+```
+
 ## Features
 
 | Feature | Status |
@@ -234,7 +302,10 @@ doc.encryption("user-pass", "owner-pass", EncryptionAlgorithm.AES_256);
 | Tagged PDF / PDF/UA accessibility | ✅ |
 | Page import for template workflows | ✅ |
 | Flexbox and CSS Grid layout | ✅ |
-| Multi-column layout | ✅ |
+| Multi-column layout (balanced or sequential) | ✅ |
+| Writer optimizer (xref streams, object streams, dedup) | ✅ |
+| Right-to-left text (paragraph, list, table) | ✅ |
+| `/ActualText` toggle for tagged PDFs | ✅ |
 | Barcodes (QR, Code128, EAN-13) | ✅ |
 | SVG rendering | ✅ |
 | Hyperlinks and internal navigation | ✅ |

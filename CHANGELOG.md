@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Bundled folio engine bumped to v0.7.1 (16 new C ABI exports)
+- `WriteOptions` builder + `Document.saveWithOptions()` /
+  `Document.toBytesWithOptions()` for the writer optimizer (xref streams,
+  object streams, orphan sweep, content-stream cleanup, object
+  deduplication, stream recompression). Both writer entry points accept
+  `null` for "use defaults"
+- `Direction` enum (`AUTO`, `LTR`, `RTL`) with `setDirection(...)` on
+  `Paragraph`, `ListElement`, and `Table`
+- `Document.setActualText(boolean)` to opt out of `/ActualText` emission
+  in tagged PDFs
+- `Columns.setBalanced(boolean)` toggle for balanced vs sequential
+  multi-column fill
+
 ## [0.1.0] - 2026-04-09
 
 First stable release of the Folio Java SDK, bundling the folio Go engine v0.6.2.

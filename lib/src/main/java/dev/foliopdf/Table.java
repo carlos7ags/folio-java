@@ -74,6 +74,23 @@ public final class Table implements Element {
     }
 
     /**
+     * Sets the writing direction (LTR, RTL, or AUTO) for this table.
+     *
+     * <p>An RTL table reverses the visual order of its columns: the first
+     * column added becomes the rightmost cell on each row. {@link Direction#AUTO}
+     * defers the choice to the Bidi heuristic over the cell content. See
+     * ISO 32000-2 §14.8.2 (Structure Attributes) for tagged-PDF interactions.
+     *
+     * @param direction the desired {@link Direction}
+     * @return this table, for chaining
+     * @since 0.7.1
+     */
+    public Table setDirection(Direction direction) {
+        FolioNative.tableSetDirection(handle.get(), direction.value());
+        return this;
+    }
+
+    /**
      * Builder for creating a {@link Table}. Obtain an instance from {@link Table#builder()}.
      */
     public static final class Builder {
