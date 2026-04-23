@@ -230,7 +230,7 @@ public final class Paragraph implements Element {
      *
      * @param direction the desired {@link Direction}
      * @return this paragraph, for chaining
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public Paragraph setDirection(Direction direction) {
         FolioNative.paragraphSetDirection(handle.get(), direction.value());

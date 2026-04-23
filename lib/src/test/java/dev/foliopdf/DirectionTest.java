@@ -7,7 +7,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/** Smoke tests for the v0.7.0 {@link Direction} setters on Paragraph, List, and Table. */
+/** Smoke tests for the v0.7.1 {@link Direction} setters on Paragraph, List, and Table. */
 class DirectionTest {
 
     @Test
@@ -99,5 +99,29 @@ class DirectionTest {
             assertTrue(text.contains("Left fragment one"));
             assertTrue(text.contains("Right fragment"));
         }
+    }
+
+    /**
+     * Renders the same paragraph twice — once with {@link Direction#LTR},
+     * once with {@link Direction#RTL} — and asserts the resulting byte
+     * streams differ. Proves the direction value reaches the engine rather
+     * than being silently dropped between Java and the C ABI.
+     */
+    @Test
+    void paragraphDirectionAffectsRenderedBytes() {
+        byte[] ltr;
+        byte[] rtl;
+        try (var doc = Document.builder().pageSize(PageSize.LETTER).build()) {
+            doc.add(Paragraph.of("Direction probe paragraph.")
+                .setDirection(Direction.LTR));
+            ltr = doc.toBytes();
+        }
+        try (var doc = Document.builder().pageSize(PageSize.LETTER).build()) {
+            doc.add(Paragraph.of("Direction probe paragraph.")
+                .setDirection(Direction.RTL));
+            rtl = doc.toBytes();
+        }
+        assertFalse(java.util.Arrays.equals(ltr, rtl),
+            "LTR and RTL outputs should differ; identical bytes mean the direction value is not reaching the engine");
     }
 }

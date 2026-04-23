@@ -16,7 +16,7 @@ package dev.foliopdf;
  * <p>Direction interacts with the PDF {@code /Lang} entry and tagged-PDF
  * structure attributes; see ISO 32000-2 §14.8.2 (Structure Attributes).
  *
- * @since 0.7.0
+ * @since 0.7.1
  */
 public enum Direction {
 
@@ -40,7 +40,7 @@ public enum Direction {
      * {@code FOLIO_DIR_*} macros in the C ABI.
      *
      * @return the native integer constant (0 = AUTO, 1 = LTR, 2 = RTL)
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public int value() {
         return value;

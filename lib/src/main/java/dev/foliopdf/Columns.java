@@ -134,7 +134,7 @@ public final class Columns implements Element {
      *
      * @param balanced {@code true} to enable balanced filling
      * @return this instance for chaining
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public Columns setBalanced(boolean balanced) {
         FolioNative.columnsSetBalanced(handle.get(), balanced);

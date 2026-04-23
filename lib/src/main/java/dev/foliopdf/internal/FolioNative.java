@@ -3151,7 +3151,7 @@ public final class FolioNative {
         });
     }
 
-    // ── WriteOptions (v0.7.0) ───────────────────────────────────────
+    // ── WriteOptions (v0.7.1) ───────────────────────────────────────
 
     private static final MethodHandle write_options_new = downcall("folio_write_options_new",
         FunctionDescriptor.of(ValueLayout.JAVA_LONG));
@@ -3262,7 +3262,7 @@ public final class FolioNative {
         });
     }
 
-    // ── Direction setters and ActualText (v0.7.0) ───────────────────
+    // ── Direction setters and ActualText (v0.7.1) ───────────────────
 
     private static final MethodHandle document_set_actual_text = downcall("folio_document_set_actual_text",
         FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));

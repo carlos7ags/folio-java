@@ -45,7 +45,7 @@ import dev.foliopdf.internal.HandleRef;
  * "use defaults", so callers writing a single document with the optimizer
  * do not need to allocate a {@code WriteOptions} instance.
  *
- * @since 0.7.0
+ * @since 0.7.1
  */
 public final class WriteOptions implements AutoCloseable {
 
@@ -59,7 +59,7 @@ public final class WriteOptions implements AutoCloseable {
      * Returns a new builder for constructing a {@link WriteOptions} instance.
      *
      * @return a fresh {@link Builder}
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public static Builder builder() {
         return new Builder();
@@ -70,7 +70,7 @@ public final class WriteOptions implements AutoCloseable {
      * passing the options to writer entry points.
      *
      * @return the opaque native handle value
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public long handle() {
         return handle.get();
@@ -80,7 +80,7 @@ public final class WriteOptions implements AutoCloseable {
      * Frees the underlying native options handle. Called automatically by
      * try-with-resources.
      *
-     * @since 0.7.0
+     * @since 0.7.1
      */
     @Override
     public void close() {
@@ -91,7 +91,7 @@ public final class WriteOptions implements AutoCloseable {
      * Builder for {@link WriteOptions}. Obtain an instance from
      * {@link WriteOptions#builder()}.
      *
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public static final class Builder {
         private Boolean useXrefStream;
@@ -111,7 +111,7 @@ public final class WriteOptions implements AutoCloseable {
          *
          * @param enabled {@code true} to write a cross-reference stream
          * @return this builder, for chaining
-         * @since 0.7.0
+         * @since 0.7.1
          */
         public Builder useXrefStream(boolean enabled) {
             this.useXrefStream = enabled;
@@ -124,7 +124,7 @@ public final class WriteOptions implements AutoCloseable {
          *
          * @param enabled {@code true} to use object streams
          * @return this builder, for chaining
-         * @since 0.7.0
+         * @since 0.7.1
          */
         public Builder useObjectStreams(boolean enabled) {
             this.useObjectStreams = enabled;
@@ -137,7 +137,7 @@ public final class WriteOptions implements AutoCloseable {
          *
          * @param capacity the per-stream object capacity (must be positive)
          * @return this builder, for chaining
-         * @since 0.7.0
+         * @since 0.7.1
          */
         public Builder objectStreamCapacity(int capacity) {
             this.objectStreamCapacity = capacity;
@@ -150,7 +150,7 @@ public final class WriteOptions implements AutoCloseable {
          *
          * @param enabled {@code true} to remove orphan objects
          * @return this builder, for chaining
-         * @since 0.7.0
+         * @since 0.7.1
          */
         public Builder orphanSweep(boolean enabled) {
             this.orphanSweep = enabled;
@@ -163,7 +163,7 @@ public final class WriteOptions implements AutoCloseable {
          *
          * @param enabled {@code true} to clean content streams
          * @return this builder, for chaining
-         * @since 0.7.0
+         * @since 0.7.1
          */
         public Builder cleanContentStreams(boolean enabled) {
             this.cleanContentStreams = enabled;
@@ -176,7 +176,7 @@ public final class WriteOptions implements AutoCloseable {
          *
          * @param enabled {@code true} to deduplicate objects
          * @return this builder, for chaining
-         * @since 0.7.0
+         * @since 0.7.1
          */
         public Builder deduplicateObjects(boolean enabled) {
             this.deduplicateObjects = enabled;
@@ -189,7 +189,7 @@ public final class WriteOptions implements AutoCloseable {
          *
          * @param enabled {@code true} to recompress existing streams
          * @return this builder, for chaining
-         * @since 0.7.0
+         * @since 0.7.1
          */
         public Builder recompressStreams(boolean enabled) {
             this.recompressStreams = enabled;
@@ -203,7 +203,7 @@ public final class WriteOptions implements AutoCloseable {
          *
          * @return a new {@link WriteOptions} instance
          * @throws FolioException if the native allocation fails
-         * @since 0.7.0
+         * @since 0.7.1
          */
         public WriteOptions build() {
             long h = FolioNative.writeOptionsNew();

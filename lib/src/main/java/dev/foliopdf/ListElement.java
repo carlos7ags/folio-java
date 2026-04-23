@@ -137,7 +137,7 @@ public final class ListElement implements Element {
      *
      * @param direction the desired {@link Direction}
      * @return this list, for chaining
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public ListElement setDirection(Direction direction) {
         FolioNative.listSetDirection(handle.get(), direction.value());

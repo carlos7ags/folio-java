@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Bundled folio engine bumped to v0.7.0 (16 new C ABI exports)
+- Bundled folio engine bumped to v0.7.1 (16 new C ABI exports)
 - `WriteOptions` builder + `Document.saveWithOptions()` /
   `Document.toBytesWithOptions()` for the writer optimizer (xref streams,
   object streams, orphan sweep, content-stream cleanup, object
