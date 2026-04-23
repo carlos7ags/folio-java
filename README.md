@@ -42,13 +42,13 @@ Native libraries for Linux (x86_64, ARM64), macOS (x86_64, ARM64), and Windows (
 <dependency>
     <groupId>dev.foliopdf</groupId>
     <artifactId>folio-java</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
 ```kotlin
 // Gradle
-implementation("dev.foliopdf:folio-java:0.1.0")
+implementation("dev.foliopdf:folio-java:0.2.0")
 ```
 
 ## Usage

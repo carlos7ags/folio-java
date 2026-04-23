@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-04-23
+
 ### Added
 
 - Bundled folio engine bumped to v0.7.1 (16 new C ABI exports)
@@ -21,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in tagged PDFs
 - `Columns.setBalanced(boolean)` toggle for balanced vs sequential
   multi-column fill
+- New examples: `Optimize` (writer-optimizer comparison), `Rtl` (Hebrew
+  bidi, Arabic shaping, kashida, ActualText), `Indic` (Devanagari
+  shaping pipeline), `Cjk` (Chinese/Japanese/Korean text + kinsoku
+  shori)
 
 ## [0.1.0] - 2026-04-09
 
@@ -53,4 +59,5 @@ First stable release of the Folio Java SDK, bundling the folio Go engine v0.6.2.
 - `OutputStream`, `InputStream`, and `Path` API support on `Document`, `PdfReader`, `HtmlConverter`, and `Font`
 - 12 runnable examples: Hello, Report, Invoice, HtmlToPdf, Merge, Forms, Fonts, Links, ZugferdInvoice, Redact, ImportPage, Sign
 
+[0.2.0]: https://github.com/carlos7ags/folio-java/releases/tag/v0.2.0
 [0.1.0]: https://github.com/carlos7ags/folio-java/releases/tag/v0.1.0
