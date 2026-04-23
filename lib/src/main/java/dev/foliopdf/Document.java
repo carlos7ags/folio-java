@@ -712,7 +712,7 @@ public final class Document implements AutoCloseable {
      * @param options the writer options, or {@code null} for defaults
      * @throws FolioIOException if the save fails due to a file I/O error
      * @throws FolioException if the native save call fails for other reasons
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public void saveWithOptions(String path, WriteOptions options) {
         long optsHandle = (options == null) ? 0L : options.handle();
@@ -727,7 +727,7 @@ public final class Document implements AutoCloseable {
      * @param options the writer options, or {@code null} for defaults
      * @throws FolioIOException if the save fails due to a file I/O error
      * @throws FolioException if the native save call fails for other reasons
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public void saveWithOptions(java.nio.file.Path path, WriteOptions options) {
         saveWithOptions(path.toString(), options);
@@ -740,7 +740,7 @@ public final class Document implements AutoCloseable {
      * @param options the writer options, or {@code null} for defaults
      * @return the PDF bytes
      * @throws FolioException if the native write call fails
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public byte[] toBytesWithOptions(WriteOptions options) {
         long optsHandle = (options == null) ? 0L : options.handle();
@@ -760,7 +760,7 @@ public final class Document implements AutoCloseable {
      *
      * @param enabled {@code true} to emit {@code /ActualText} entries
      * @return this document, for chaining
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public Document setActualText(boolean enabled) {
         FolioNative.documentSetActualText(handle.get(), enabled);

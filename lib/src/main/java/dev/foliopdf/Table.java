@@ -83,7 +83,7 @@ public final class Table implements Element {
      *
      * @param direction the desired {@link Direction}
      * @return this table, for chaining
-     * @since 0.7.0
+     * @since 0.7.1
      */
     public Table setDirection(Direction direction) {
         FolioNative.tableSetDirection(handle.get(), direction.value());
