@@ -128,6 +128,23 @@ public final class ListElement implements Element {
     }
 
     /**
+     * Sets the writing direction (LTR, RTL, or AUTO) for this list.
+     *
+     * <p>RTL lists place markers (bullets or numbers) on the right and run
+     * item text right-to-left. {@link Direction#AUTO} runs the Unicode Bidi
+     * algorithm over the items to infer direction. See ISO 32000-2 §14.8.2
+     * for how direction interacts with tagged-PDF structure attributes.
+     *
+     * @param direction the desired {@link Direction}
+     * @return this list, for chaining
+     * @since 0.7.0
+     */
+    public ListElement setDirection(Direction direction) {
+        FolioNative.listSetDirection(handle.get(), direction.value());
+        return this;
+    }
+
+    /**
      * Appends a nested (indented) sub-list item and returns the new sub-list.
      *
      * @param text the nested item text

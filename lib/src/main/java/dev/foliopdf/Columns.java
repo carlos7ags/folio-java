@@ -124,6 +124,24 @@ public final class Columns implements Element {
     }
 
     /**
+     * Toggles balanced column fill. When balanced, the engine sequentially
+     * fills columns to roughly equal heights instead of overflowing the
+     * first column before starting the next. When disabled, content fills
+     * each column to the available height in turn.
+     *
+     * <p>Balanced layout follows the model used by the CSS
+     * {@code column-fill: balance} property (CSS Multi-column Layout, level 1).
+     *
+     * @param balanced {@code true} to enable balanced filling
+     * @return this instance for chaining
+     * @since 0.7.0
+     */
+    public Columns setBalanced(boolean balanced) {
+        FolioNative.columnsSetBalanced(handle.get(), balanced);
+        return this;
+    }
+
+    /**
      * Returns the native handle for this columns container.
      *
      * @return the opaque native handle value

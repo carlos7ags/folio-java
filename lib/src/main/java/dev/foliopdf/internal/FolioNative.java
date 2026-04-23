@@ -3150,4 +3150,167 @@ public final class FolioNative {
             }
         });
     }
+
+    // ── WriteOptions (v0.7.0) ───────────────────────────────────────
+
+    private static final MethodHandle write_options_new = downcall("folio_write_options_new",
+        FunctionDescriptor.of(ValueLayout.JAVA_LONG));
+    public static long writeOptionsNew() {
+        return locked(() -> {
+            try { return (long) write_options_new.invokeExact(); }
+            catch (Throwable t) { throw new FolioException("writeOptionsNew failed", t); }
+        });
+    }
+
+    private static final MethodHandle write_options_free = downcall("folio_write_options_free",
+        FunctionDescriptor.ofVoid(ValueLayout.JAVA_LONG));
+    public static void writeOptionsFree(long opts) {
+        lockedVoid(() -> {
+            try { write_options_free.invokeExact(opts); }
+            catch (Throwable t) { throw new FolioException("writeOptionsFree failed", t); }
+        });
+    }
+
+    private static final MethodHandle write_options_set_use_xref_stream = downcall("folio_write_options_set_use_xref_stream",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void writeOptionsSetUseXrefStream(long opts, boolean enabled) {
+        lockedVoid(() -> {
+            try { int rc = (int) write_options_set_use_xref_stream.invokeExact(opts, enabled ? 1 : 0); checkResult(rc, "writeOptionsSetUseXrefStream"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("writeOptionsSetUseXrefStream failed", t); }
+        });
+    }
+
+    private static final MethodHandle write_options_set_use_object_streams = downcall("folio_write_options_set_use_object_streams",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void writeOptionsSetUseObjectStreams(long opts, boolean enabled) {
+        lockedVoid(() -> {
+            try { int rc = (int) write_options_set_use_object_streams.invokeExact(opts, enabled ? 1 : 0); checkResult(rc, "writeOptionsSetUseObjectStreams"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("writeOptionsSetUseObjectStreams failed", t); }
+        });
+    }
+
+    private static final MethodHandle write_options_set_object_stream_capacity = downcall("folio_write_options_set_object_stream_capacity",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void writeOptionsSetObjectStreamCapacity(long opts, int capacity) {
+        lockedVoid(() -> {
+            try { int rc = (int) write_options_set_object_stream_capacity.invokeExact(opts, capacity); checkResult(rc, "writeOptionsSetObjectStreamCapacity"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("writeOptionsSetObjectStreamCapacity failed", t); }
+        });
+    }
+
+    private static final MethodHandle write_options_set_orphan_sweep = downcall("folio_write_options_set_orphan_sweep",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void writeOptionsSetOrphanSweep(long opts, boolean enabled) {
+        lockedVoid(() -> {
+            try { int rc = (int) write_options_set_orphan_sweep.invokeExact(opts, enabled ? 1 : 0); checkResult(rc, "writeOptionsSetOrphanSweep"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("writeOptionsSetOrphanSweep failed", t); }
+        });
+    }
+
+    private static final MethodHandle write_options_set_clean_content_streams = downcall("folio_write_options_set_clean_content_streams",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void writeOptionsSetCleanContentStreams(long opts, boolean enabled) {
+        lockedVoid(() -> {
+            try { int rc = (int) write_options_set_clean_content_streams.invokeExact(opts, enabled ? 1 : 0); checkResult(rc, "writeOptionsSetCleanContentStreams"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("writeOptionsSetCleanContentStreams failed", t); }
+        });
+    }
+
+    private static final MethodHandle write_options_set_deduplicate_objects = downcall("folio_write_options_set_deduplicate_objects",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void writeOptionsSetDeduplicateObjects(long opts, boolean enabled) {
+        lockedVoid(() -> {
+            try { int rc = (int) write_options_set_deduplicate_objects.invokeExact(opts, enabled ? 1 : 0); checkResult(rc, "writeOptionsSetDeduplicateObjects"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("writeOptionsSetDeduplicateObjects failed", t); }
+        });
+    }
+
+    private static final MethodHandle write_options_set_recompress_streams = downcall("folio_write_options_set_recompress_streams",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void writeOptionsSetRecompressStreams(long opts, boolean enabled) {
+        lockedVoid(() -> {
+            try { int rc = (int) write_options_set_recompress_streams.invokeExact(opts, enabled ? 1 : 0); checkResult(rc, "writeOptionsSetRecompressStreams"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("writeOptionsSetRecompressStreams failed", t); }
+        });
+    }
+
+    private static final MethodHandle document_save_with_options = downcall("folio_document_save_with_options",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_LONG));
+    public static void documentSaveWithOptions(long doc, String path, long opts) {
+        lockedVoid(() -> {
+            try (var arena = Arena.ofConfined()) {
+                int rc = (int) document_save_with_options.invokeExact(doc, arena.allocateFrom(path), opts);
+                checkResult(rc, "documentSaveWithOptions");
+            } catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("documentSaveWithOptions failed", t); }
+        });
+    }
+
+    private static final MethodHandle document_write_to_buffer_with_options = downcall("folio_document_write_to_buffer_with_options",
+        FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG));
+    public static long documentWriteToBufferWithOptions(long doc, long opts) {
+        return locked(() -> {
+            try { return (long) document_write_to_buffer_with_options.invokeExact(doc, opts); }
+            catch (Throwable t) { throw new FolioException("documentWriteToBufferWithOptions failed", t); }
+        });
+    }
+
+    // ── Direction setters and ActualText (v0.7.0) ───────────────────
+
+    private static final MethodHandle document_set_actual_text = downcall("folio_document_set_actual_text",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void documentSetActualText(long doc, boolean enabled) {
+        lockedVoid(() -> {
+            try { int rc = (int) document_set_actual_text.invokeExact(doc, enabled ? 1 : 0); checkResult(rc, "documentSetActualText"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("documentSetActualText failed", t); }
+        });
+    }
+
+    private static final MethodHandle paragraph_set_direction = downcall("folio_paragraph_set_direction",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void paragraphSetDirection(long para, int dir) {
+        lockedVoid(() -> {
+            try { int rc = (int) paragraph_set_direction.invokeExact(para, dir); checkResult(rc, "paragraphSetDirection"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("paragraphSetDirection failed", t); }
+        });
+    }
+
+    private static final MethodHandle list_set_direction = downcall("folio_list_set_direction",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void listSetDirection(long list, int dir) {
+        lockedVoid(() -> {
+            try { int rc = (int) list_set_direction.invokeExact(list, dir); checkResult(rc, "listSetDirection"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("listSetDirection failed", t); }
+        });
+    }
+
+    private static final MethodHandle table_set_direction = downcall("folio_table_set_direction",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void tableSetDirection(long table, int dir) {
+        lockedVoid(() -> {
+            try { int rc = (int) table_set_direction.invokeExact(table, dir); checkResult(rc, "tableSetDirection"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("tableSetDirection failed", t); }
+        });
+    }
+
+    private static final MethodHandle columns_set_balanced = downcall("folio_columns_set_balanced",
+        FunctionDescriptor.of(ValueLayout.JAVA_INT, ValueLayout.JAVA_LONG, ValueLayout.JAVA_INT));
+    public static void columnsSetBalanced(long columns, boolean enabled) {
+        lockedVoid(() -> {
+            try { int rc = (int) columns_set_balanced.invokeExact(columns, enabled ? 1 : 0); checkResult(rc, "columnsSetBalanced"); }
+            catch (FolioException e) { throw e; }
+            catch (Throwable t) { throw new FolioException("columnsSetBalanced failed", t); }
+        });
+    }
 }

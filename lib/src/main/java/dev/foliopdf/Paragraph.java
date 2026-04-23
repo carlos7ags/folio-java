@@ -221,6 +221,23 @@ public final class Paragraph implements Element {
     }
 
     /**
+     * Sets the writing direction (LTR, RTL, or AUTO) for this paragraph.
+     *
+     * <p>{@link Direction#AUTO} runs the Unicode Bidi algorithm over the
+     * paragraph contents to infer direction from the dominant script.
+     * Direction influences the {@code /Lang} entry and structure attributes
+     * in tagged-PDF output (ISO 32000-2 §14.8.2).
+     *
+     * @param direction the desired {@link Direction}
+     * @return this paragraph, for chaining
+     * @since 0.7.0
+     */
+    public Paragraph setDirection(Direction direction) {
+        FolioNative.paragraphSetDirection(handle.get(), direction.value());
+        return this;
+    }
+
+    /**
      * Returns the native handle for this paragraph.
      *
      * @return the native handle value
