@@ -463,9 +463,7 @@ public final class Document implements AutoCloseable {
      * @throws FolioException if the native call fails
      */
     public long addOutline(String title, int pageIndex) {
-        long h = FolioNative.documentAddOutline(handle.get(), title, pageIndex);
-        if (h == 0) throw new FolioException("Failed to add outline: " + FolioNative.lastError());
-        return h;
+        return FolioNative.documentAddOutline(handle.get(), title, pageIndex);
     }
 
     /**

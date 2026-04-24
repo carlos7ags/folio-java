@@ -112,6 +112,13 @@ public final class FolioNative {
         }
     }
 
+    static long checkHandle(long handle, String operation) {
+        if (handle == 0) {
+            throw new FolioException(operation + ": " + lastError());
+        }
+        return handle;
+    }
+
     // ── Document ────────────────────────────────────────────────────
 
     private static final MethodHandle document_new = downcall("folio_document_new",
@@ -759,15 +766,8 @@ public final class FolioNative {
     private static final MethodHandle table_add_row = downcall("folio_table_add_row",
         FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG));
 
-    public static long tableAddRow(long table) {
-        return locked(() -> {
-            try {
-                return (long) table_add_row.invokeExact(table);
-            } catch (Throwable t) {
-                throw new FolioException("tableAddRow failed", t);
-            }
-        });
-    }
+    public static long tableAddRow(long table) { return locked(() -> { try { return checkHandle((long) table_add_row.invokeExact(table), "tableAddRow"); } catch (FolioException e) { throw e; } catch (Throwable t) { throw new FolioException("tableAddRow failed", t); } }); }
+
 
     private static final MethodHandle table_add_header_row = downcall("folio_table_add_header_row",
         FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG));
@@ -1082,15 +1082,8 @@ public final class FolioNative {
     private static final MethodHandle image_load_png = downcall("folio_image_load_png",
         FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS));
 
-    public static long imageLoadPng(String path) {
-        return locked(() -> {
-            try (var arena = Arena.ofConfined()) {
-                return (long) image_load_png.invokeExact(arena.allocateFrom(path));
-            } catch (Throwable t) {
-                throw new FolioException("imageLoadPng failed", t);
-            }
-        });
-    }
+    public static long imageLoadPng(String path) { return locked(() -> { try (var arena = Arena.ofConfined()) { return checkHandle((long) image_load_png.invokeExact(arena.allocateFrom(path)), "imageLoadPng"); } catch (FolioException e) { throw e; } catch (Throwable t) { throw new FolioException("imageLoadPng failed", t); } }); }
+
 
     private static final MethodHandle image_parse_jpeg = downcall("folio_image_parse_jpeg",
         FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
@@ -2254,7 +2247,7 @@ public final class FolioNative {
     public static void documentSetWatermarkConfig(long doc, String text, double fontSize, double r, double g, double b, double angle, double opacity) { lockedVoid(() -> { try (var arena = Arena.ofConfined()) { int rc = (int) document_set_watermark_config.invokeExact(doc, arena.allocateFrom(text), fontSize, r, g, b, angle, opacity); checkResult(rc, "documentSetWatermarkConfig"); } catch (FolioException e) { throw e; } catch (Throwable t) { throw new FolioException("documentSetWatermarkConfig failed", t); } }); }
 
     private static final MethodHandle document_add_outline = downcall("folio_document_add_outline", FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT));
-    public static long documentAddOutline(long doc, String title, int pageIndex) { return locked(() -> { try (var arena = Arena.ofConfined()) { return (long) document_add_outline.invokeExact(doc, arena.allocateFrom(title), pageIndex); } catch (Throwable t) { throw new FolioException("documentAddOutline failed", t); } }); }
+    public static long documentAddOutline(long doc, String title, int pageIndex) { return locked(() -> { try (var arena = Arena.ofConfined()) { return checkHandle((long) document_add_outline.invokeExact(doc, arena.allocateFrom(title), pageIndex), "documentAddOutline"); } catch (FolioException e) { throw e; } catch (Throwable t) { throw new FolioException("documentAddOutline failed", t); } }); }
 
     private static final MethodHandle document_add_outline_xyz = downcall("folio_document_add_outline_xyz", FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.JAVA_LONG, ValueLayout.ADDRESS, ValueLayout.JAVA_INT, ValueLayout.JAVA_DOUBLE, ValueLayout.JAVA_DOUBLE, ValueLayout.JAVA_DOUBLE));
     public static long documentAddOutlineXyz(long doc, String title, int pageIndex, double left, double top, double zoom) { return locked(() -> { try (var arena = Arena.ofConfined()) { return (long) document_add_outline_xyz.invokeExact(doc, arena.allocateFrom(title), pageIndex, left, top, zoom); } catch (Throwable t) { throw new FolioException("documentAddOutlineXyz failed", t); } }); }

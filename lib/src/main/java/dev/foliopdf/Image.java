@@ -51,7 +51,6 @@ public final class Image implements AutoCloseable, Element {
      */
     public static Image loadPng(String path) {
         long img = FolioNative.imageLoadPng(path);
-        if (img == 0) throw new FolioIOException("Failed to load PNG: " + path + ": " + FolioNative.lastError());
         long elem = FolioNative.imageElementNew(img);
         if (elem == 0) throw new FolioException("Failed to create image element: " + FolioNative.lastError());
         return new Image(img, elem);
