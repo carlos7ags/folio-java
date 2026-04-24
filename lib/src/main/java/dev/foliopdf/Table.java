@@ -310,7 +310,6 @@ public final class Table implements Element {
             int styledIdx = 0;
             for (String[] row : rows) {
                 long rowHandle = FolioNative.tableAddRow(tableHandle);
-                if (rowHandle == 0) throw new FolioException("Failed to add table row: " + FolioNative.lastError());
                 if (row == null) {
                     styledRows.get(styledIdx++).accept(new Row(rowHandle, f, fontSize));
                 } else {
